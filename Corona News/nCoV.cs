@@ -54,7 +54,7 @@ namespace Corona_News
             var time = regex[0].Groups["time"].Value;
             var news = regex[1].Groups["news"].Value;
 
-            var text = $"*Cập nhật lúc {time}:*\n>{news}";
+            var text = $"*Cập nhật lúc {time}:*\n>>>{news}";
 
             return text;
         }
@@ -72,7 +72,7 @@ namespace Corona_News
             for (int i = 1; i < news.Count(); i++)
                 if (news[i] != newsOld[i])
                 {
-                    message += $"\n\n {news[i]}";
+                    message += $"\n\n{news[i]}";
                     update = true;
                 }
 
@@ -113,7 +113,7 @@ namespace Corona_News
 
             html = RemoveTags(html);
 
-            var text = html.Replace("Việt Nam:", "*Việt Nam*:").Replace("Thế giới", "*Thế giới*").Replace("  ", " ");
+            var text = html.Replace("Việt Nam:", "*Việt Nam*:").Replace("Thế giới", "*Thế giới*").Replace("  ", " ").Replace(":-", ":\n-");
 
             return text;
         }
