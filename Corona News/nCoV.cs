@@ -18,7 +18,7 @@ namespace Corona_News
             var pattern = "Cập nhật lúc(.*?)trường hợp\\.</li>";
             var htmlNews = Regex.Match(html, pattern, RegexOptions.Singleline).Value;
 
-            var text = ConvertToText(htmlNews).Replace("\n\n", "").Replace("\n", "\n>").Replace(">*Việt Nam*", "\n>*Việt Nam*").Replace(">*Thế giới*", "\n>*Thế giới*");
+            var text = ConvertToText(htmlNews).Replace("\n\n", "\n").Replace("\n", "\n>").Replace(">*Việt Nam*", "\n>*Việt Nam*").Replace(">*Thế giới*", "\n>*Thế giới*");
 
             return text.Split("\n\n");
         }
@@ -63,10 +63,10 @@ namespace Corona_News
         {
             var news = GetNews();
             var newsOld = new string[] { "", "", "" };
-            var pathNews = "../data/Covid-19.json";
+            var pathNews = "./data/Covid-19.json";
 
             if (File.Exists(pathNews))
-                newsOld = JsonConvert.DeserializeObject<string[]>(File.ReadAllText(pathNews, Encoding.Unicode));
+                newsOld = JsonConvert.DeserializeObject<string[]>(File.ReadAllText(pathNews, Encoding.UTF8));
 
             var message = news[0]; bool update = false;
             for (int i = 1; i < news.Count(); i++)
@@ -78,7 +78,7 @@ namespace Corona_News
 
             if (update)
             {
-                File.WriteAllText(pathNews, JsonConvert.SerializeObject(news, Formatting.Indented), Encoding.Unicode);
+                File.WriteAllText(pathNews, JsonConvert.SerializeObject(news, Formatting.Indented), Encoding.UTF8);
                 Helper.ConsoleLogs($"Corona News: Đã có thông tin cập nhật. Sendding... {Helper.Message(message)}");
             }
             else Helper.ConsoleLogs("Corona News: Không có thông tin nCoV cập nhật.");
@@ -89,14 +89,14 @@ namespace Corona_News
             var timeline = Timeline();
             var timelineOld = "";
 
-            var pathTimeline = "../data/Timeline.json";
+            var pathTimeline = "./data/Timeline.json";
             if (File.Exists(pathTimeline))
-                timelineOld = JsonConvert.DeserializeObject<string>(File.ReadAllText(pathTimeline, Encoding.Unicode));
+                timelineOld = JsonConvert.DeserializeObject<string>(File.ReadAllText(pathTimeline, Encoding.UTF8));
 
             if (!(timeline == timelineOld && File.Exists(pathTimeline)))
             {
                 Helper.ConsoleLogs($"Corona News: Đã có timeline cập nhật. Sendding... {Helper.Message(timeline)}");
-                File.WriteAllText(pathTimeline, JsonConvert.SerializeObject(timeline, Formatting.Indented), Encoding.Unicode);
+                File.WriteAllText(pathTimeline, JsonConvert.SerializeObject(timeline, Formatting.Indented), Encoding.UTF8);
             }
             else Helper.ConsoleLogs("Corona News: Không có timeline Việt Nam cập nhật.");
         }
@@ -111,7 +111,9 @@ namespace Corona_News
         {
             html = html.Replace("\n", "").Replace("\r", "").Replace("</p>", "\n").Replace("<li>", "\n").Replace("<br />", "\n").Replace("&nbsp;", " ");
 
-            var text = RemoveTags(html).Replace("Việt Nam:", "*Việt Nam*:").Replace("Thế giới", "*Thế giới*").Replace("  ", " ");
+            html = RemoveTags(html);
+
+            var text = html.Replace("Việt Nam:", "*Việt Nam*:").Replace("Thế giới", "*Thế giới*").Replace("  ", " ");
 
             return text;
         }

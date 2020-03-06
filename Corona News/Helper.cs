@@ -9,7 +9,7 @@ namespace Corona_News
     {
         public static void LoadConfigWebhook()
         {
-            var path = "../data/ConfigWebhook.json";
+            var path = "./data/ConfigWebhook.json";
 
             if (File.Exists(path))
             {
@@ -22,7 +22,7 @@ namespace Corona_News
             }
         }
 
-        public static void WriteEnvironmentToFile() => File.WriteAllText("../data/ConfigWebhook.json", JsonConvert.SerializeObject(Environment.ConfigWebhook, Formatting.Indented));
+        public static void WriteEnvironmentToFile() => File.WriteAllText("./data/ConfigWebhook.json", JsonConvert.SerializeObject(Environment.ConfigWebhook, Formatting.Indented));
 
         public static void ConsoleLogs(string log, string webhook = "")
         {
@@ -39,7 +39,7 @@ namespace Corona_News
 
 #if RELEASE
             if (string.IsNullOrEmpty(webhook)) Message($"```{log}```", Environment.ConfigWebhook.WebhookLogs);
-            else Message($"`{log}`", webhook);
+            else Message($"```{log}```", webhook);
 #endif
         }
 

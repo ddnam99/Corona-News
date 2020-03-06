@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading;
 
@@ -8,7 +9,19 @@ namespace Corona_News
     {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = Encoding.Unicode;
+            Console.OutputEncoding = Encoding.UTF8;
+
+            if (!File.Exists("./data/ConfigWebhook.json"))
+            {
+                if (!Directory.Exists("./data")) Directory.CreateDirectory("./data");
+
+                Environment.ConfigWebhook.Webhook = "https://hooks.slack.com/services/xxx";
+                Environment.ConfigWebhook.WebhookLogs = "https://hooks.slack.com/services/xxx";
+                Environment.ConfigWebhook.WebhookDebug = "https://hooks.slack.com/services/xxx";
+
+                Helper.WriteEnvironmentToFile();
+            }
+
 
             Helper.ConsoleLogs("Corona News: Started !");
 
