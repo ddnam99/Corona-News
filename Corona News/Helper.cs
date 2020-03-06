@@ -9,11 +9,9 @@ namespace Corona_News
     {
         public static void LoadConfigWebhook()
         {
-            var path = "./data/ConfigWebhook.json";
-
-            if (File.Exists(path))
+            if (File.Exists(Environment.ConfigPath))
             {
-                var configWebhook = JsonConvert.DeserializeObject<ConfigurationWebhook>(File.ReadAllText(path));
+                var configWebhook = JsonConvert.DeserializeObject<ConfigurationWebhook>(File.ReadAllText(Environment.ConfigPath));
                 if (!Environment.GetConfigurationWebhook().Equals(configWebhook))
                 {
                     ConsoleLogs("Corona News: Update Webhook Config!", configWebhook.WebhookLogs);
@@ -22,7 +20,7 @@ namespace Corona_News
             }
         }
 
-        public static void WriteEnvironmentToFile() => File.WriteAllText("./data/ConfigWebhook.json", JsonConvert.SerializeObject(Environment.ConfigWebhook, Formatting.Indented));
+        public static void WriteEnvironmentToFile() => File.WriteAllText(Environment.ConfigPath, JsonConvert.SerializeObject(Environment.ConfigWebhook, Formatting.Indented));
 
         public static void ConsoleLogs(string log, string webhook = "")
         {

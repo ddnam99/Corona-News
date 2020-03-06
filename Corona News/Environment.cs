@@ -19,6 +19,14 @@ namespace Corona_News
             }
             set => configWebhook = value;
         }
+
+        [JsonIgnore]
+        public static string ConfigPath { get => "./data/ConfigWebhook.json"; }
+        [JsonIgnore]
+        public static string CovidPath { get => "./data/Covid-19.json"; }
+        [JsonIgnore]
+        public static string TimelinePath { get => "./data/Timeline.json"; }
+
     }
 
     class ConfigurationWebhook

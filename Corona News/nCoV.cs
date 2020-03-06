@@ -63,10 +63,9 @@ namespace Corona_News
         {
             var news = GetNews();
             var newsOld = new string[] { "", "", "" };
-            var pathNews = "./data/Covid-19.json";
 
-            if (File.Exists(pathNews))
-                newsOld = JsonConvert.DeserializeObject<string[]>(File.ReadAllText(pathNews, Encoding.UTF8));
+            if (File.Exists(Environment.CovidPath))
+                newsOld = JsonConvert.DeserializeObject<string[]>(File.ReadAllText(Environment.CovidPath, Encoding.UTF8));
 
             var message = news[0]; bool update = false;
             for (int i = 1; i < news.Count(); i++)
@@ -78,7 +77,7 @@ namespace Corona_News
 
             if (update)
             {
-                File.WriteAllText(pathNews, JsonConvert.SerializeObject(news, Formatting.Indented), Encoding.UTF8);
+                File.WriteAllText(Environment.CovidPath, JsonConvert.SerializeObject(news, Formatting.Indented), Encoding.UTF8);
                 Helper.ConsoleLogs($"Corona News: Đã có thông tin cập nhật. Sendding... {Helper.Message(message)}");
             }
             else Helper.ConsoleLogs("Corona News: Không có thông tin nCoV cập nhật.");
@@ -89,14 +88,13 @@ namespace Corona_News
             var timeline = Timeline();
             var timelineOld = "";
 
-            var pathTimeline = "./data/Timeline.json";
-            if (File.Exists(pathTimeline))
-                timelineOld = JsonConvert.DeserializeObject<string>(File.ReadAllText(pathTimeline, Encoding.UTF8));
+            if (File.Exists(Environment.TimelinePath))
+                timelineOld = JsonConvert.DeserializeObject<string>(File.ReadAllText(Environment.TimelinePath, Encoding.UTF8));
 
-            if (!(timeline == timelineOld && File.Exists(pathTimeline)))
+            if (!(timeline == timelineOld && File.Exists(Environment.TimelinePath)))
             {
                 Helper.ConsoleLogs($"Corona News: Đã có timeline cập nhật. Sendding... {Helper.Message(timeline)}");
-                File.WriteAllText(pathTimeline, JsonConvert.SerializeObject(timeline, Formatting.Indented), Encoding.UTF8);
+                File.WriteAllText(Environment.TimelinePath, JsonConvert.SerializeObject(timeline, Formatting.Indented), Encoding.UTF8);
             }
             else Helper.ConsoleLogs("Corona News: Không có timeline Việt Nam cập nhật.");
         }

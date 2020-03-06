@@ -11,7 +11,7 @@ namespace Corona_News
         {
             Console.OutputEncoding = Encoding.UTF8;
 
-            if (!File.Exists("./data/ConfigWebhook.json"))
+            if (!File.Exists(Environment.ConfigPath))
             {
                 if (!Directory.Exists("./data")) Directory.CreateDirectory("./data");
 
@@ -22,7 +22,6 @@ namespace Corona_News
                 Helper.WriteEnvironmentToFile();
             }
 
-
             Helper.ConsoleLogs("Corona News: Started !");
 
             while (true)
@@ -31,6 +30,7 @@ namespace Corona_News
                 {
                     nCoV.NotifyNews();
 
+                    //double minutes = 5 - (DateTime.Now.Minute % 5);
                     double minutes = 35 - (DateTime.Now.Minute % 30); bool stop = false;
                     if (DateTime.Now.Hour < 6)
                     {
