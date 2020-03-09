@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace Corona_News
 {
@@ -107,7 +108,7 @@ namespace Corona_News
 
         private static string ConvertToText(string html)
         {
-            html = html.Replace("\n", "").Replace("\r", "").Replace("</p>", "\n").Replace("<li>", "\n").Replace("<br />", "\n").Replace("&nbsp;", " ");
+            html = html.Replace("\n", "").Replace("\r", "").Replace("</p>", "\n").Replace("<li>", "\n").Replace("<br />", "\n");
 
             html = RemoveTags(html);
 
@@ -126,14 +127,14 @@ namespace Corona_News
             return html;
         }
 
-        private static string GetHTML(string link)
+        private static string GetHTML(string url)
         {
-            var client = new RestClient(link);
+            var client = new RestClient(url);
 
             var request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);
 
-            return response.Content;
+            return WebUtility.HtmlDecode(response.Content);
         }
     }
 }
