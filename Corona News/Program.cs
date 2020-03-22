@@ -48,7 +48,7 @@ namespace Corona_News
                         stop = false;
                     }
                 }
-                catch (Exception e) { Helper.LogError($"Error: nCoV News...\n{e.ToString()}"); }
+                catch (Exception e) { Helper.LogError($"Error: Corona News...\n{e.ToString()}"); }
             }
         }
     }

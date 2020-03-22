@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Net;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Corona_News
 {
@@ -12,7 +15,7 @@ namespace Corona_News
     {
         private static string[] GetNews()
         {
-            Helper.ConsoleLogs("Corona News: Lấy thông tin nCoV...");
+            //Helper.ConsoleLogs("Corona News: Lấy thông tin nCoV...");
 
             string html = GetHTML("https://suckhoedoisong.vn/Virus-nCoV-cap-nhat-moi-nhat-lien-tuc-n168210.html");
 
@@ -44,7 +47,7 @@ namespace Corona_News
 
         private static string Timeline()
         {
-            Helper.ConsoleLogs("Corona News: Lấy thông timeline nCoV Việt Nam...");
+            //Helper.ConsoleLogs("Corona News: Lấy thông timeline nCoV Việt Nam...");
 
             string html = GetHTML("https://ncov.moh.gov.vn/");
 
@@ -81,7 +84,7 @@ namespace Corona_News
                 File.WriteAllText(Environment.CovidPath, JsonConvert.SerializeObject(news, Formatting.Indented), Encoding.UTF8);
                 Helper.ConsoleLogs($"Corona News: Đã có thông tin cập nhật. Sendding... {Helper.Message(message)}");
             }
-            else Helper.ConsoleLogs("Corona News: Không có thông tin nCoV cập nhật.");
+            //else Helper.ConsoleLogs("Corona News: Không có thông tin nCoV cập nhật.");
         }
 
         public static void CheckTimeline()
@@ -97,13 +100,43 @@ namespace Corona_News
                 Helper.ConsoleLogs($"Corona News: Đã có timeline cập nhật. Sendding... {Helper.Message(timeline)}");
                 File.WriteAllText(Environment.TimelinePath, JsonConvert.SerializeObject(timeline, Formatting.Indented), Encoding.UTF8);
             }
-            else Helper.ConsoleLogs("Corona News: Không có timeline Việt Nam cập nhật.");
+            //else Helper.ConsoleLogs("Corona News: Không có timeline Việt Nam cập nhật.");
         }
 
         public static void NotifyNews()
         {
-            CheckNews();
-            CheckTimeline();
+            var taskCheckNews = new Task(() =>
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    try
+                    {
+                        CheckNews();
+                        break;
+                    }
+                    catch (Exception e) { Helper.LogError($"Error: Check News...\n{e.ToString()}"); }
+                    Thread.Sleep(TimeSpan.FromMinutes(1));
+                }
+            });
+
+            var taskChecTimeline = new Task(() =>
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    try
+                    {
+                        CheckTimeline();
+                        break;
+                    }
+                    catch (Exception e) { Helper.LogError($"Error: Check Timeline...\n{e.ToString()}"); }
+                    Thread.Sleep(TimeSpan.FromMinutes(1));
+                }
+            });
+
+            taskCheckNews.Start();
+            taskChecTimeline.Start();
+
+            Task.WaitAll(taskCheckNews, taskChecTimeline);
         }
 
         private static string ConvertToText(string html)
