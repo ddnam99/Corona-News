@@ -19,10 +19,10 @@ namespace Corona_News
 
             string html = GetHTML("https://suckhoedoisong.vn/Virus-nCoV-cap-nhat-moi-nhat-lien-tuc-n168210.html");
 
-            var pattern = "Cập nhật lúc(.*?)trường hợp\\.</li>";
-            var htmlNews = Regex.Match(html, pattern, RegexOptions.Singleline).Value;
+            var pattern = "<div id=\"content_detail_news\">(.*?)</div>(?<news>.*?)</ul>";
+            var htmlNews = Regex.Match(html, pattern, RegexOptions.Singleline).Groups["news"].Value;
 
-            var text = ConvertToText(htmlNews).Replace("\n\n", "\n").Replace("\n", "\n>").Replace(">*Việt Nam*", "\n>*Việt Nam*").Replace(">*Thế giới*", "\n>*Thế giới*");
+            var text = ConvertToText(htmlNews).Replace("\n\n", "\n").Replace("\n", "\n>").Replace(">*Việt Nam*", "\n>*Việt Nam*").Replace(">*Thế giới*", "\n>*Thế giới*").Trim();
 
             return text.Split("\n\n");
         }
@@ -145,7 +145,7 @@ namespace Corona_News
 
             html = RemoveTags(html);
 
-            var text = html.Replace("Việt Nam:", "*Việt Nam*:").Replace("Thế giới", "*Thế giới*").Replace("  ", " ").Replace(":-", ":\n-");
+            var text = html.Replace("Việt Nam:", "*Việt Nam*:").Replace(" Thế giới", "*Thế giới*").Replace("  ", " ").Replace(":-", ":\n-");
 
             return text;
         }

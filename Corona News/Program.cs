@@ -31,7 +31,7 @@ namespace Corona_News
                     nCoV.NotifyNews();
 
                     //double minutes = 5 - (DateTime.Now.Minute % 5);
-                    double minutes = 35 - (DateTime.Now.Minute % 30); bool stop = false;
+                    double minutes = 15 - (DateTime.Now.Minute % 15); bool stop = false;
                     if (DateTime.Now.Hour < 6)
                     {
                         var now = DateTime.Now;

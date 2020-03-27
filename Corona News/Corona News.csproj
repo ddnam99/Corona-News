@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Corona_News</RootNamespace>
-    <AssemblyName>Corona News</AssemblyName>
+    <AssemblyName>Covid-19</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
